@@ -12,4 +12,19 @@
 
   <artifactId>ns-core</artifactId>
 
+  <dependencies>
+    <dependency>
+      <groupId>io.netty</groupId>
+      <artifactId>netty-all</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.google.guava</groupId>
+      <artifactId>guava</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>top.kwseeker</groupId>
+      <artifactId>ns-api</artifactId>
+    </dependency>
+  </dependencies>
 </project>
