@@ -1,13 +1,12 @@
 package top.kwseeker.core.guava;
 
-import com.google.common.cache.Cache;
-import com.google.common.cache.CacheBuilder;
-import com.google.common.cache.CacheLoader;
-import com.google.common.cache.LoadingCache;
+import com.google.common.cache.*;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
 import javax.annotation.Nonnull;
+import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
@@ -18,32 +17,26 @@ import java.util.concurrent.TimeUnit;
  *
  * 1
  * V apply(K key)
- *
  * Deprecated. Provided to satisfy the Function interface; use get(K) or getUnchecked(K) instead.
  *
  * 2
  * ConcurrentMap<K,V> asMap()
- *
  * Returns a view of the entries stored in this cache as a thread-safe map.
  *
  * 3
  * V get(K key)
- *
  * Returns the value associated with key in this cache, first loading that value if necessary.
  *
  * 4
  * ImmutableMap<K,V> getAll(Iterable<? extends K> keys)
- *
  * Returns a map of the values associated with keys, creating or retrieving those values if necessary.
  *
  * 5
  * V getUnchecked(K key)
- *
  * Returns the value associated with key in this cache, first loading that value if necessary.
  *
  * 6
  * void refresh(K key)
- *
  * Loads a new value for key, possibly asynchronously.
  */
 public class CacheTest {
@@ -59,7 +52,14 @@ public class CacheTest {
                 .concurrencyLevel(5)        //同一时间最多只能有5个线程往cache执行写操作
                 .expireAfterWrite(10, TimeUnit.SECONDS) //数据写入后的存活时间
                 //.expireAfterAccess(10, TimeUnit.SECONDS)
-                //.removalListener()
+                .removalListener(new RemovalListener<Object, Object>() {    //监听移除事件
+                    @Override
+                    public void onRemoval(@Nonnull RemovalNotification<Object, Object> notification) {
+                        System.out.println("Remove a map entry, cause=" + notification.getCause()
+                                + ", key=" + notification.getKey()
+                                + ", value=" + notification.getValue());
+                    }
+                })
                 //.recordStats()
                 //.refreshAfterWrite()
                 .build(new CacheLoader<Key, Value>() {
@@ -76,30 +76,35 @@ public class CacheTest {
     }
 
     @Test
-    public void testPut() {
-        //直接插入数据
-        //cache.put(key, value)
-        //
-        //cache1.put("one", 1);
-    }
-
-    @Test
-    public void testGet() {
+    public void testPutGetDel() {
         try {
             Key key1 = new Key("1");
             Key key2 = new Key("2");
             long beginTime = System.currentTimeMillis();
-            //第一次通过load获取
+            //第一次通过load获取                                   //put and get
             System.out.println(cache.get(key1));
             System.out.println(cache.get(key2));
             System.out.println(System.currentTimeMillis() - beginTime);
             //第二次从缓存中直接获取
-            System.out.println(cache.get(key1));
-            System.out.println(cache.get(key2));
+            Assert.assertEquals(1, cache.get(key1).getValue().longValue());
+            Assert.assertEquals(2, cache.get(key2).getValue().longValue());
             System.out.println(System.currentTimeMillis() - beginTime);
 
+            Assert.assertEquals(2, cache.size());
+            cache.invalidate(key1);                             //delete
+            Assert.assertEquals(1, cache.size());
+            ConcurrentMap<Key, Value> map = cache.asMap();
+            cache.invalidateAll();
+            //直接插入数据
+            Key key3 = new Key("3");
+            cache.put(key3, new Value(3));                      //put
+            cache.invalidateAll();
+
+            //cache1.put("one", 1);
+
             //graphs.getUnchecked(key);
-            //
+
+            //如果缓存不存在该key或者key过期使用get()
             //cache.get(key, new Callable<Value>() {
             //    @Override
             //    public Value call() throws AnyException {
@@ -110,6 +115,16 @@ public class CacheTest {
         } catch (ExecutionException e) {
             e.printStackTrace();
         }
+    }
+
+    //TODO Cache中元素自动回收
+    @Test
+    public void testEviction() {
+        //基于容量的回收
+
+        //基于超时的回收
+
+        //基于引用的回收
     }
 
     //实际应用中常常是从数据库或文件中读取

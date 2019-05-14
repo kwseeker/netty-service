@@ -1,6 +1,6 @@
 # Guava
 
-Guava是一组核心库，包括新的集合类型（例如multimap和multiset），不可变集合，图形库，函数类型，内存缓存以及用于并发，
+Guava是一组Java核心增强库，包括新的集合类型（例如multimap和multiset），不可变集合，图形库，函数类型，内存缓存以及用于并发，
 I/O，散列，基元的API /实用程序 ，反射，字符串处理等等！
 
 源码地址 [google/guava](https://github.com/google/guava)  
@@ -9,8 +9,11 @@ I/O，散列，基元的API /实用程序 ，反射，字符串处理等等！
 
 ## Caches缓存
 
-当值计算或检索的代价很高时应该考虑使用缓存。
-Guava Cache 实现的是应用的本地缓存。
+通过占用内存提升访问速度。
+
+当值计算或检索的代价很高时应该考虑使用缓存。  
+Guava Cache 实现的是应用的本地缓存，与Java Map List等集合类同属JVM堆缓存。  
+另外比较常用的是分布式缓存，由一些缓存中间件实现，如Redis、Memcached。
 
 Caches和ConcurrentMap类似，但是Caches通常有自动回收元素的功能用来限制内存占用。
 但是LoadingCache是特例不会自动逐出内容但是有自己的自动缓存加载机制。
@@ -36,6 +39,8 @@ Caches和ConcurrentMap类似，但是Caches通常有自动回收元素的功能�
 
 + 定时回收
 
+    
+
 + 基于引用回收
 
 + 显示清除
@@ -43,6 +48,14 @@ Caches和ConcurrentMap类似，但是Caches通常有自动回收元素的功能�
 #### 移除监听
 
 #### 刷新键值
+
+#### Cache源码实现原理
+
+Guava Cache 的设计核心数据结构是参考ConcurrentHashMap实现的。
+另外内部维护了两个队列 accessQueue writeQueue 用于记录缓存顺序；
+这样才可以按照顺序淘汰数据，类似利用LinkedHashMap做LRU缓存（参考kwseeker/concurrency）。
+
+里面使用了构建者模式方便自定义属性（参考kwseeker/）。
 
 ## Guava发布/订阅（观察者）模式
 
