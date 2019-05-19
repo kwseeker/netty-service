@@ -7,9 +7,9 @@ public interface Connection {
 
     void init(Channel channel);
 
-    //SessionContext getSessionContext();
+    SessionContext getSessionContext();
 
-    //void setSessionContext(SessionContext context);
+    void setSessionContext(SessionContext context);
 
     void send(Packet packet);
 

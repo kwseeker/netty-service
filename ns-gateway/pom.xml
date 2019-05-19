@@ -12,4 +12,10 @@
 
   <artifactId>ns-gateway</artifactId>
 
+  <dependencies>
+    <dependency>
+      <groupId>top.kwseeker</groupId>
+      <artifactId>ns-api</artifactId>
+    </dependency>
+  </dependencies>
 </project>

@@ -17,7 +17,9 @@ public abstract class AbstractNettyClientFactory {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AbstractNettyClientFactory.class);
 
+    //缓存键的格式（IP:Port）
     private static final String FORMAT = "%s:%s";
+    //客户端缓存（基于Guava Cache）
     private final Cache<String, Client> cachedClients = CacheBuilder.newBuilder()
             .maximumSize(2 << 17)   //最大支持缓存65535*2个连接
             .expireAfterAccess(60, TimeUnit.MINUTES)
@@ -31,13 +33,14 @@ public abstract class AbstractNettyClientFactory {
             })
             .build();
 
+    //通过IP、端口唯一确定一个客户端，如果缓存中没有则新建一个客户端
     public Client get(final String remoteHost, final int port, final ChannelHandler handler) throws Exception {
         final String key = String.format(FORMAT, remoteHost, port);
+
         Client client = cachedClients.get(key, new Callable<Client>() {
             @Override
             public Client call() throws Exception {
-                Client client = createClient(remoteHost, port, handler);
-                return client;
+                return createClient(remoteHost, port, handler);
             }
         });
         if (client == null) {

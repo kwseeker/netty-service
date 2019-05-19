@@ -6,15 +6,18 @@ import io.netty.channel.ChannelFutureListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import top.kwseeker.api.Connection;
+import top.kwseeker.api.SessionContext;
 import top.kwseeker.api.protocol.Packet;
+import top.kwseeker.core.security.CipherBox;
 
 /**
- *
+ * NettyConnection 是通信的时候的 Channel（io.netty.channel.Channel）的包装类
  */
-public class NettyConnection implements Connection {
+public  class NettyConnection implements Connection {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(NettyConnection.class);
 
+    private SessionContext context;
     private Channel channel;
     private int status = 0;
     private int hbTimes;
@@ -22,11 +25,19 @@ public class NettyConnection implements Connection {
     @Override
     public void init(Channel channel) {
         this.channel = channel;
+        this.context = new SessionContext();
+        this.context.changeCipher(CipherBox.INSTANCE.getRsaCipher());
     }
 
-    //SessionContext getSessionContext();
+    @Override
+    public void setSessionContext(SessionContext context) {
+        this.context = context;
+    }
 
-    //void setSessionContext(SessionContext context);
+    @Override
+    public SessionContext getSessionContext() {
+        return context;
+    }
 
     @Override
     public void send(Packet packet) {

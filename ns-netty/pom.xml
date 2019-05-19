@@ -31,5 +31,9 @@
             <groupId>top.kwseeker</groupId>
             <artifactId>ns-api</artifactId>
         </dependency>
+        <dependency>
+            <groupId>top.kwseeker</groupId>
+            <artifactId>ns-core</artifactId>
+        </dependency>
     </dependencies>
 </project>

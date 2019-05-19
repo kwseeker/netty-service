@@ -7,13 +7,23 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import top.kwseeker.api.protocol.Packet;
 
+/**
+ * 后台返回的数据编码为ByteBuf数据流
+ */
 public class PacketEncoder extends MessageToByteEncoder<Packet> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PacketEncoder.class);
 
-    //TODO: 将Packet数据转化为ByteBuf数据
     @Override
-    protected void encode(ChannelHandlerContext ctx, Packet msg, ByteBuf out) throws Exception {
-
+    protected void encode(ChannelHandlerContext ctx, Packet packet, ByteBuf out) throws Exception {
+        out.writeInt(packet.getBodyLength());
+        out.writeByte(packet.cmd);
+        out.writeShort(packet.cc);
+        out.writeByte(packet.flags);
+        out.writeInt(packet.sessionId);
+        out.writeByte(packet.lrc);
+        if(packet.getBodyLength() > 0) {
+            out.writeBytes(packet.body);
+        }
     }
 }

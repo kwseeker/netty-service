@@ -2,6 +2,7 @@ package top.kwseeker.api.protocol;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
+import top.kwseeker.api.Constants;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
@@ -27,6 +28,33 @@ public class Packet {
     public Packet(byte cmd, int sessionId) {
         this.cmd = cmd;
         this.sessionId = sessionId;
+    }
+
+    public Packet(byte cmd, short cc, byte flags, int sessionId, byte lrc, byte[] body) {
+        this.cmd = cmd;
+        this.cc = cc;
+        this.flags = flags;
+        this.sessionId = sessionId;
+        this.lrc = lrc;
+        this.body = body;
+    }
+
+    public static Packet readPacketFromByteBuf(ByteBuf in, int bodyLength) {
+        byte command = in.readByte();
+        short cc = in.readShort();
+        byte flags = in.readByte();
+        int sessionId = in.readInt();
+        byte lrc = in.readByte();
+        byte[] body = null;
+
+        if(bodyLength > 0) {
+            if(bodyLength > Constants.MAX_PACKET_SIZE) {
+                throw new RuntimeException("Error Packet size: " + bodyLength);
+            }
+            body = new byte[bodyLength];
+            in.readBytes(body);
+        }
+        return new Packet(command, cc, flags, sessionId, lrc, body);
     }
 
     public int getBodyLength() {

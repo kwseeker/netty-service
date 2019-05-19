@@ -14,6 +14,13 @@ import top.kwseeker.netty.codec.PacketEncoder;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
+/**
+ * Netty服务端
+ *
+ * 1）注册用于业务处理的ChannelHandler
+ * 2）注册通用的通信包的编解码器 PacketEncoder/PacketDecoder
+ * 3）Netty Server配置项
+ */
 public class NettyServer implements Server {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(NettyServer.class);

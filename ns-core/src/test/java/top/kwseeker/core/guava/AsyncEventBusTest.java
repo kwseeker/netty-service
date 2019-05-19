@@ -24,18 +24,21 @@ public class AsyncEventBusTest {
     @Before
     public void init() throws Exception {
         executor = new FakeExecutor();
+        //1）创建异步事件总线及处理事件的executor
         bus = new AsyncEventBus(executor);
     }
 
     @Test
     public void testBasicDistribution() {
+        //2）创建订阅者
         StringCatcher catcher = new StringCatcher();
+        //3）注册订阅者
         bus.register(catcher);
 
         // We post the event, but our Executor will not deliver it until instructed.
+        //4）发布事件
         bus.post(EVENT);
 
-        //执行回调
         List<String> events = catcher.getEvents();
         assertTrue("No events should be delivered synchronously.", events.isEmpty());
 

@@ -15,6 +15,7 @@
     <module>ns-core</module>
     <module>ns-gateway</module>
     <module>ns-netty</module>
+    <module>ns-util</module>
   </modules>
 
   <properties>
@@ -24,6 +25,8 @@
     <ns.connection.version>1.0-SNAPSHOT</ns.connection.version>
     <ns.core.version>1.0-SNAPSHOT</ns.core.version>
     <ns.gateway.version>1.0-SNAPSHOT</ns.gateway.version>
+    <ns.util.version>1.0-SNAPSHOT</ns.util.version>
+    <ns.netty.version>1.0-SNAPSHOT</ns.netty.version>
     <netty.version>4.1.33.Final</netty.version>
     <junit.version>4.12</junit.version>
     <logback.version>1.2.3</logback.version>
@@ -90,10 +93,31 @@
         <artifactId>ns-gateway</artifactId>
         <version>${ns.gateway.version}</version>
       </dependency>
+      <dependency>
+        <groupId>top.kwseeker</groupId>
+        <artifactId>ns-util</artifactId>
+        <version>${ns.util.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>top.kwseeker</groupId>
+        <artifactId>ns-netty</artifactId>
+        <version>${ns.netty.version}</version>
+      </dependency>
     </dependencies>
   </dependencyManagement>
 
   <build>
+    <!--<resources>-->
+      <!--<resource>-->
+        <!--<directory>./conf</directory>-->
+        <!--<filtering>true</filtering>-->
+        <!--<includes>-->
+          <!--<include>*.xml</include>-->
+          <!--<include>*.properties</include>-->
+        <!--</includes>-->
+      <!--</resource>-->
+    <!--</resources>-->
+
     <plugins>
       <!--全部子模块选择指定的Java版本和编码格式-->
       <plugin>

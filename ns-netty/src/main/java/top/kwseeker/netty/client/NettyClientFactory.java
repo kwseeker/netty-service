@@ -5,6 +5,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import top.kwseeker.api.Client;
 
+/**
+ * 创建客户端
+ */
 public class NettyClientFactory extends AbstractNettyClientFactory {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(NettyClientFactory.class);
