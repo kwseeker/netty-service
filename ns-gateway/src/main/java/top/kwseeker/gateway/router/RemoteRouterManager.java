@@ -1,22 +1,21 @@
 package top.kwseeker.gateway.router;
 
-import top.kwseeker.api.router.Router;
 import top.kwseeker.api.router.RouterManager;
 
-public class RemoteRouterManager implements RouterManager {
+public class RemoteRouterManager implements RouterManager<RemoteRouter> {
 
     @Override
-    public boolean publish(String userId, Router route) {
+    public RemoteRouter register(String userId, RemoteRouter route) {
+        return null;
+    }
+
+    @Override
+    public boolean unRegister(String userId) {
         return true;
     }
 
     @Override
-    public boolean unPublish(String userId) {
-        return true;
-    }
-
-    @Override
-    public Router getRouter(String userId) {
+    public RemoteRouter lookup(String userId) {
         return null;
     }
 }

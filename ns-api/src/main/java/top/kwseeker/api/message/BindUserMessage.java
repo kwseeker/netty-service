@@ -1,15 +1,20 @@
-package top.kwseeker.core.message;
+package top.kwseeker.api.message;
 
 import com.google.common.base.Strings;
 import top.kwseeker.api.Connection;
 import top.kwseeker.api.Constants;
+import top.kwseeker.api.protocol.Command;
 import top.kwseeker.api.protocol.Packet;
 
-public class BindMessage extends BaseMessage {
+public class BindUserMessage extends BaseMessage {
 
     public String userId;
 
-    public BindMessage(Packet message, Connection connection) {
+    public BindUserMessage(Connection connection) {
+        super(new Packet(Command.BIND.cmd, genSessionId()), connection);
+    }
+
+    public BindUserMessage(Packet message, Connection connection) {
         super(message, connection);
     }
 

@@ -18,5 +18,5 @@ public interface Constants {
     byte COMPRESS_FLAG = 0x02;
     long TIME_DELAY = 1L;
 
-    int HEARTBEAT_TIME = 1000;
+    int HEARTBEAT_TIME = 1000*60*5; //5min
 }

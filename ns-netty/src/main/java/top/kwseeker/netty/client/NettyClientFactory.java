@@ -18,11 +18,8 @@ public class NettyClientFactory extends AbstractNettyClientFactory {
         return new NettyClient(host, port, handler);
     }
 
-    public Client getClient(final Client client) throws Exception {
-        return get(client.getHost(), client.getPort());
-    }
-
     public void remove(final Client client) {
         super.remove(client);
     }
+
 }

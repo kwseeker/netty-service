@@ -2,9 +2,14 @@ package top.kwseeker.api.router;
 
 import top.kwseeker.api.Connection;
 
-public interface Router {
+public interface Router<T> {
 
-    Connection getConnect();
+    T getRouteValue();
 
-    RouterInfo getRouterInfo();
+    RouterType getRouteType();
+
+    enum RouterType {
+        LOCAL,
+        REMOTE
+    }
 }

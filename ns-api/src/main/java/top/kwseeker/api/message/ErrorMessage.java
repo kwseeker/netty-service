@@ -1,11 +1,11 @@
-package top.kwseeker.core.message;
+package top.kwseeker.api.message;
 
 import io.netty.buffer.ByteBuf;
 import top.kwseeker.api.Connection;
 import top.kwseeker.api.protocol.Command;
 import top.kwseeker.api.protocol.Packet;
 
-public class ErrorMessage extends ByteBufMessage {
+public final class ErrorMessage extends ByteBufMessage {
 
     public String reason;
     public byte errorCode;
@@ -15,7 +15,7 @@ public class ErrorMessage extends ByteBufMessage {
     }
 
     public static ErrorMessage from(BaseMessage src) {
-        return new ErrorMessage(new Packet(Command.ERROR.cmd, src.message.sessionId), src.connection);
+        return new ErrorMessage(new Packet(Command.ERROR.cmd, src.packet.sessionId), src.connection);
     }
 
     public ErrorMessage setReason(String reason) {
@@ -50,7 +50,7 @@ public class ErrorMessage extends ByteBufMessage {
         return "ErrorMessage{" +
                 "reason='" + reason + '\'' +
                 ", errorCode=" + errorCode +
-                ", message=" + message +
+                ", packet=" + packet +
                 '}';
     }
 }

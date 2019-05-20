@@ -7,7 +7,7 @@ import io.netty.handler.timeout.IdleStateEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import top.kwseeker.api.Connection;
-import top.kwseeker.api.Receiver;
+import top.kwseeker.api.PacketReceiver;
 import top.kwseeker.api.protocol.Packet;
 import top.kwseeker.core.ConnectionManager;
 import top.kwseeker.core.NettyConnection;
@@ -17,16 +17,16 @@ public class ServerChannelHandler extends ChannelInboundHandlerAdapter {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ServerChannelHandler.class);
 
-    private final Receiver receiver;
+    private final PacketReceiver packetReceiver;
 
-    public ServerChannelHandler(Receiver receiver) {
-        this.receiver = receiver;
+    public ServerChannelHandler(PacketReceiver packetReceiver) {
+        this.packetReceiver = packetReceiver;
     }
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
         Connection connection = ConnectionManager.INSTANCE.get(ctx.channel());
-        receiver.onReceive((Packet) msg, connection);
+        packetReceiver.onReceive((Packet) msg, connection);
     }
 
     @Override

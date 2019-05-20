@@ -2,21 +2,21 @@ package top.kwseeker.gateway.router;
 
 import top.kwseeker.api.Connection;
 import top.kwseeker.api.router.Router;
-import top.kwseeker.api.router.RouterInfo;
 
-public class LocalRouter implements Router {
-
+public class LocalRouter implements Router<Connection> {
     private final Connection connection;
 
     public LocalRouter(Connection connection) {
         this.connection = connection;
     }
 
-    public Connection getConnect() {
+    @Override
+    public Connection getRouteValue() {
         return connection;
     }
 
-    public RouterInfo getRouterInfo() {
-        return null;
+    @Override
+    public RouterType getRouteType() {
+        return RouterType.LOCAL;
     }
 }

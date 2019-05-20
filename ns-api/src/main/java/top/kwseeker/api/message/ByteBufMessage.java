@@ -1,4 +1,4 @@
-package top.kwseeker.core.message;
+package top.kwseeker.api.message;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;

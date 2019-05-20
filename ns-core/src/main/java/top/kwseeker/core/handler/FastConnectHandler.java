@@ -2,9 +2,9 @@ package top.kwseeker.core.handler;
 
 import top.kwseeker.api.Constants;
 import top.kwseeker.api.MessageHandler;
-import top.kwseeker.core.message.ErrorMessage;
-import top.kwseeker.core.message.FastConnectMessage;
-import top.kwseeker.core.message.FastConnectSuccessMessage;
+import top.kwseeker.api.message.ErrorMessage;
+import top.kwseeker.api.message.FastConnectMessage;
+import top.kwseeker.api.message.FastConnectSuccessMessage;
 import top.kwseeker.core.security.ReusableSession;
 import top.kwseeker.core.security.ReusableSessionManager;
 import top.kwseeker.util.NetUtil;

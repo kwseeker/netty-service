@@ -1,22 +1,22 @@
 package top.kwseeker.gateway.router;
 
-import top.kwseeker.api.Connection;
+import top.kwseeker.api.ClientLocation;
 import top.kwseeker.api.router.Router;
-import top.kwseeker.api.router.RouterInfo;
 
-public class RemoteRouter implements Router {
+public class RemoteRouter implements Router<ClientLocation> {
+    private final ClientLocation clientLocation;
 
-    private final RouterInfo routerInfo;
-
-    public RemoteRouter(RouterInfo routerInfo) {
-        this.routerInfo = routerInfo;
+    public RemoteRouter(ClientLocation clientLocation) {
+        this.clientLocation = clientLocation;
     }
 
-    public Connection getConnect() {
-        return null;
+    @Override
+    public ClientLocation getRouteValue() {
+        return clientLocation;
     }
 
-    public RouterInfo getRouterInfo() {
-        return null;
+    @Override
+    public RouterType getRouteType() {
+        return RouterType.REMOTE;
     }
 }

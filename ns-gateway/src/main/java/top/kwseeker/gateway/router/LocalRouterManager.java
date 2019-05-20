@@ -1,28 +1,26 @@
 package top.kwseeker.gateway.router;
 
-import top.kwseeker.api.router.Router;
 import top.kwseeker.api.router.RouterManager;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class LocalRouterManager implements RouterManager {
-    private final Map<String, Router> routerMap = new ConcurrentHashMap<>();
+public class LocalRouterManager implements RouterManager<LocalRouter> {
+    private final Map<String, LocalRouter> routerMap = new ConcurrentHashMap<>();
 
     @Override
-    public boolean publish(String userId, Router route) {
-        routerMap.put(userId, route);
-        return true;
+    public LocalRouter register(String userId, LocalRouter route) {
+        return routerMap.put(userId, route);
     }
 
     @Override
-    public boolean unPublish(String userId) {
+    public boolean unRegister(String userId) {
         routerMap.remove(userId);
         return true;
     }
 
     @Override
-    public Router getRouter(String userId) {
+    public LocalRouter lookup(String userId) {
         return routerMap.get(userId);
     }
 }

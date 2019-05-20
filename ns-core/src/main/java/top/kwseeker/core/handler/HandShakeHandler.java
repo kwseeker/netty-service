@@ -7,18 +7,17 @@ import top.kwseeker.api.Constants;
 import top.kwseeker.api.MessageHandler;
 import top.kwseeker.api.SessionContext;
 import top.kwseeker.api.event.HandshakeEvent;
+import top.kwseeker.api.message.ErrorMessage;
+import top.kwseeker.api.message.HandShakeMessage;
+import top.kwseeker.api.message.HandshakeSuccessMessage;
 import top.kwseeker.core.EventBus;
-import top.kwseeker.core.message.ErrorMessage;
-import top.kwseeker.core.message.HandShakeMessage;
-import top.kwseeker.core.message.HandshakeSuccessMessage;
 import top.kwseeker.core.security.AesCipher;
 import top.kwseeker.core.security.CipherBox;
 import top.kwseeker.core.security.ReusableSession;
 import top.kwseeker.core.security.ReusableSessionManager;
 import top.kwseeker.util.NetUtil;
 
-public class HandShakeHandler implements MessageHandler<HandShakeMessage> {
-
+public final class HandShakeHandler implements MessageHandler<HandShakeMessage> {
     public static final Logger LOGGER = LoggerFactory.getLogger(HandShakeHandler.class);
 
     @Override
@@ -48,7 +47,7 @@ public class HandShakeHandler implements MessageHandler<HandShakeMessage> {
 
         //4.生成可复用session, 用于快速重连
         ReusableSession session = ReusableSessionManager.INSTANCE.genSession(context);
-        ReusableSessionManager.INSTANCE.saveSession(session);
+        ReusableSessionManager.INSTANCE.cacheSession(session);
 
         //5.响应握手成功消息
         HandshakeSuccessMessage

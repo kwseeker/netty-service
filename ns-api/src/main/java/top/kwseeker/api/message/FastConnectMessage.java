@@ -1,4 +1,4 @@
-package top.kwseeker.core.message;
+package top.kwseeker.api.message;
 
 import io.netty.buffer.ByteBuf;
 import top.kwseeker.api.Connection;
@@ -24,3 +24,4 @@ public final class FastConnectMessage extends ByteBufMessage {
         encodeString(body, deviceId);
     }
 }
+

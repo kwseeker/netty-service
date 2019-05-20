@@ -1,10 +1,10 @@
-package top.kwseeker.core.message;
+package top.kwseeker.api.message;
 
 import io.netty.buffer.ByteBuf;
 import top.kwseeker.api.Connection;
 import top.kwseeker.api.protocol.Packet;
 
-public class HandshakeSuccessMessage extends ByteBufMessage {
+public final class HandshakeSuccessMessage extends ByteBufMessage {
 
     public byte[] serverKey;
     public String serverHost;

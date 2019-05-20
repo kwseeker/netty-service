@@ -1,10 +1,13 @@
 package top.kwseeker.api.router;
 
-public interface RouterManager {
+public interface RouterManager<R extends Router> {
 
-    boolean publish(String userId, Router route);
+    //注册路由
+    R register(String userId, R route);
 
-    boolean unPublish(String userId);
+    //删除路由
+    boolean unRegister(String userId);
 
-    Router getRouter(String userId);
+    //查询路由
+    R lookup(String userId);
 }

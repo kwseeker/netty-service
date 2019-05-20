@@ -15,32 +15,43 @@ import java.util.concurrent.TimeUnit;
 
 public abstract class AbstractNettyClientFactory {
 
+    private static final String format = "%s:%s";
+
     private static final Logger LOGGER = LoggerFactory.getLogger(AbstractNettyClientFactory.class);
 
-    //缓存键的格式（IP:Port）
-    private static final String FORMAT = "%s:%s";
-    //客户端缓存（基于Guava Cache）
-    private final Cache<String, Client> cachedClients = CacheBuilder.newBuilder()
-            .maximumSize(2 << 17)   //最大支持缓存65535*2个连接
-            .expireAfterAccess(60, TimeUnit.MINUTES)
+    /**
+     * host:port
+     */
+    private final Cache<String, Client> cachedClients = CacheBuilder.newBuilder()//
+            .maximumSize(2 << 17)// 最大是65535*2
+            .expireAfterAccess(2 * 60, TimeUnit.MINUTES)// 如果经过120分钟没有访问，释放掉连接，缓解内存和服务器连接压力
             .removalListener(new RemovalListener<String, Client>() {
                 @Override
                 public void onRemoval(RemovalNotification<String, Client> notification) {
                     if (notification.getValue().isConnected()) {
-                        notification.getValue().close("[Remoting] removed from cache");
+                        notification.getValue().stop();
+                        LOGGER.warn("[Remoting] removed from cache");
                     }
                 }
             })
             .build();
 
-    //通过IP、端口唯一确定一个客户端，如果缓存中没有则新建一个客户端
+    /**
+     * 不存在，则创建
+     *
+     * @param remoteHost
+     * @param port
+     * @param handler
+     * @return
+     * @throws Exception
+     */
     public Client get(final String remoteHost, final int port, final ChannelHandler handler) throws Exception {
-        final String key = String.format(FORMAT, remoteHost, port);
-
+        final String key = String.format(format, remoteHost, port);
         Client client = cachedClients.get(key, new Callable<Client>() {
             @Override
             public Client call() throws Exception {
-                return createClient(remoteHost, port, handler);
+                Client client = createClient(remoteHost, port, handler);
+                return client;
             }
         });
         if (client == null) {
@@ -61,10 +72,12 @@ public abstract class AbstractNettyClientFactory {
 
     protected abstract Client createClient(final String remoteHost, final int port, ChannelHandler handler) throws Exception;
 
+
     public void remove(Client client) {
         if (client != null) {
             cachedClients.invalidate(client.getUri());
             LOGGER.warn(MessageFormat.format("[Remoting] {0} is removed", client));
         }
     }
+
 }

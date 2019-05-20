@@ -3,26 +3,26 @@ package top.kwseeker.core;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import top.kwseeker.api.Connection;
-import top.kwseeker.api.Receiver;
+import top.kwseeker.api.PacketReceiver;
+import top.kwseeker.api.message.BindUserMessage;
+import top.kwseeker.api.message.FastConnectMessage;
+import top.kwseeker.api.message.HandShakeMessage;
+import top.kwseeker.api.message.HeartbeatMessage;
 import top.kwseeker.api.protocol.Command;
 import top.kwseeker.api.protocol.Packet;
-import top.kwseeker.core.handler.BindHandler;
+import top.kwseeker.core.handler.BindUserHandler;
 import top.kwseeker.core.handler.FastConnectHandler;
 import top.kwseeker.core.handler.HandShakeHandler;
 import top.kwseeker.core.handler.HeartBeatHandler;
-import top.kwseeker.core.message.BindMessage;
-import top.kwseeker.core.message.FastConnectMessage;
-import top.kwseeker.core.message.HandShakeMessage;
-import top.kwseeker.core.message.HeartbeatMessage;
 
 /**
  *
  */
-public class MessageDispatcher implements Receiver {
+public class MessageDispatcher implements PacketReceiver {
 
     public static final Logger LOG = LoggerFactory.getLogger(MessageDispatcher.class);
 
-    public final BindHandler bindHandler = new BindHandler();
+    public final BindUserHandler bindUserHandler = new BindUserHandler();
     public final HandShakeHandler handShakeHandler = new HandShakeHandler();
     public final FastConnectHandler fastConnectHandler = new FastConnectHandler();
     public final HeartBeatHandler heartBeatHandler = new HeartBeatHandler();
@@ -38,7 +38,7 @@ public class MessageDispatcher implements Receiver {
                 break;
             case BIND:
                 LOG.info("Received Bind message ...");
-                bindHandler.handle(new BindMessage(packet, connection));
+                bindUserHandler.handle(new BindUserMessage(packet, connection));
                 break;
             case HEARTBEAT:
                 heartBeatHandler.handle(new HeartbeatMessage(connection));

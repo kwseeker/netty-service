@@ -31,11 +31,6 @@ public class NettyServer implements Server {
     private EventLoopGroup workerGroup;
     private final ChannelHandler channelHandler;
 
-    public NettyServer(int port) {
-        this.port = port;
-        this.channelHandler = null;
-    }
-
     public NettyServer(int port, ChannelHandler channelHandler) {
         this.port = port;
         this.channelHandler = channelHandler;

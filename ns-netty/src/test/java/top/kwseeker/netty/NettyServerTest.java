@@ -4,7 +4,7 @@ import io.netty.channel.ChannelHandler;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import top.kwseeker.api.Receiver;
+import top.kwseeker.api.PacketReceiver;
 import top.kwseeker.core.MessageDispatcher;
 import top.kwseeker.core.handler.ServerChannelHandler;
 import top.kwseeker.netty.server.NettyServer;
@@ -16,8 +16,8 @@ public class NettyServerTest {
     @Test
     public void testStart() throws Exception {
 
-        Receiver receiver = new MessageDispatcher();
-        ChannelHandler handler = new ServerChannelHandler(receiver);
+        PacketReceiver packetReceiver = new MessageDispatcher();
+        ChannelHandler handler = new ServerChannelHandler(packetReceiver);
 
         final NettyServer server = new NettyServer(3000, handler);
         server.start();

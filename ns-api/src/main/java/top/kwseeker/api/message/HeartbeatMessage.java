@@ -1,7 +1,8 @@
-package top.kwseeker.core.message;
+package top.kwseeker.api.message;
 
 import top.kwseeker.api.Connection;
 import top.kwseeker.api.Message;
+import top.kwseeker.api.protocol.Packet;
 
 public final class HeartbeatMessage implements Message {
 
@@ -22,5 +23,10 @@ public final class HeartbeatMessage implements Message {
 
     @Override
     public void sendRaw() {
+    }
+
+    @Override
+    public Packet getPacket() {
+        return null;
     }
 }

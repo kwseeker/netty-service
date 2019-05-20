@@ -1,12 +1,11 @@
-package top.kwseeker.core.message;
+package top.kwseeker.api.message;
 
 import io.netty.buffer.ByteBuf;
 import top.kwseeker.api.Connection;
 import top.kwseeker.api.protocol.Command;
 import top.kwseeker.api.protocol.Packet;
 
-public class HandShakeMessage extends ByteBufMessage {
-
+public final class HandShakeMessage extends ByteBufMessage {
     public String deviceId;
     public String osName;
     public String osVersion;
@@ -15,8 +14,8 @@ public class HandShakeMessage extends ByteBufMessage {
     public byte[] clientKey;
     public long timestamp;
 
-    public HandShakeMessage(int sessionId, Connection connection) {
-        super(new Packet(Command.HANDSHAKE.cmd, sessionId), connection);
+    public HandShakeMessage(Connection connection) {
+        super(new Packet(Command.HANDSHAKE.cmd, genSessionId()), connection);
     }
 
     public HandShakeMessage(Packet message, Connection connection) {

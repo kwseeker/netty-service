@@ -23,5 +23,9 @@
           <groupId>com.google.guava</groupId>
           <artifactId>guava</artifactId>
       </dependency>
+      <dependency>
+          <groupId>top.kwseeker</groupId>
+          <artifactId>ns-util</artifactId>
+      </dependency>
   </dependencies>
 </project>

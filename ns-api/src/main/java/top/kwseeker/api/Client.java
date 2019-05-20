@@ -2,23 +2,17 @@ package top.kwseeker.api;
 
 public interface Client {
 
+    //客户端初始化
     void init();
 
+    //客户端启动
     void start();
 
-    void close(final String cause);
+    //客户端停止
+    void stop();
 
-    boolean isEnabled();
-
+    //客户端是否连接服务端
     boolean isConnected();
-
-    void resetHbTimes();
-
-    int increaseAndGetHbTimes();
-
-    String getHost();
-
-    int getPort();
 
     String getUri();
 }

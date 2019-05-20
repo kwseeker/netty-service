@@ -1,8 +1,10 @@
 package top.kwseeker.gateway.router;
 
+import top.kwseeker.api.ClientLocation;
 import top.kwseeker.api.Connection;
+import top.kwseeker.api.SessionContext;
+import top.kwseeker.api.message.KickUserMessage;
 import top.kwseeker.api.router.Router;
-import top.kwseeker.api.router.RouterInfo;
 
 public class RouterCenter {
 
@@ -11,22 +13,48 @@ public class RouterCenter {
     private final LocalRouterManager localRouterManager = new LocalRouterManager();
     private final RemoteRouterManager remoteRouterManager = new RemoteRouterManager();
 
-    public boolean publish(String userId, Connection connection) {
-        localRouterManager.publish(userId, new LocalRouter(connection));
-        remoteRouterManager.publish(userId, new RemoteRouter(new RouterInfo("127.0.0.1")));
+    //注册用户和链接
+    public boolean register(String userId, Connection connection) {
+        ClientLocation connConfig = ClientLocation.from(connection.getSessionContext());
+
+        LocalRouter localRouter = new LocalRouter(connection);
+        RemoteRouter remoteRouter = new RemoteRouter(connConfig);
+
+        LocalRouter oldLocalRouter = localRouterManager.register(userId, localRouter);
+        RemoteRouter oldRemoteRouter = remoteRouterManager.register(userId, remoteRouter);
+        if (oldLocalRouter != null) {
+            kickLocalUser(userId, oldLocalRouter);
+        }
+
+        if (oldRemoteRouter != null) {
+            kickRemoteUser(userId, oldRemoteRouter);
+        }
         return true;
     }
 
-    public boolean unPublish(String userId) {
-        localRouterManager.unPublish(userId);
-        remoteRouterManager.unPublish(userId);
+    public boolean unRegister(String userId) {
+        localRouterManager.unRegister(userId);
+        remoteRouterManager.unRegister(userId);
         return true;
     }
 
-    public Router lookup(String userId) {
-        Router local = localRouterManager.getRouter(userId);
+    public Router<?> lookup(String userId) {
+        LocalRouter local = localRouterManager.lookup(userId);
         if (local != null) return local;
-        Router remote = remoteRouterManager.getRouter(userId);
+        RemoteRouter remote = remoteRouterManager.lookup(userId);
         return remote;
+    }
+
+    private void kickLocalUser(String userId, LocalRouter router) {
+        Connection connection = router.getRouteValue();
+        SessionContext context = connection.getSessionContext();
+        KickUserMessage message = new KickUserMessage(connection);
+        message.deviceId = context.deviceId;
+        message.userId = userId;
+        message.send();
+    }
+
+    private void kickRemoteUser(String userId, RemoteRouter router) {
+        //send msg to zk
     }
 }
